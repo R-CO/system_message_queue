@@ -13,9 +13,11 @@ SystemMessageQueue::~SystemMessageQueue() {
 
 // default permission: Permission::all
 bool SystemMessageQueue::createQueue(const key_t key) {
-  static const int kMessageFlag = IPC_CREAT | static_cast<int>(Permission::all);
+  static const int kMessageFlag =
+      IPC_CREAT | IPC_EXCL | static_cast<int>(Permission::all);
 
   this->key_ = key;
+  this->msgflg_ = kMessageFlag;
   this->queue_id_ = msgget(key, kMessageFlag);
   error_no_ = errno;
 
@@ -29,8 +31,23 @@ bool SystemMessageQueue::createQueueWithPermission(
 }
 
 bool SystemMessageQueue::bindQueueViaKey(const key_t key) {
-  // TODO:
-  return false;
+  static const int kGetMessageflg = 0;
+  static const int kCreateOnlyMessageflg =
+      static_cast<int>(Permission::all) | IPC_CREAT | IPC_EXCL;
+
+  // check exist
+  auto msqid = msgget(key, kCreateOnlyMessageflg);
+  if (msqid != -1) {
+    msgctl(msqid, IPC_RMID, nullptr);
+    return false;
+  }
+
+  this->queue_id_ = msgget(key, kGetMessageflg);
+  if (this->queue_id_ == -1) {
+    return false;
+  }
+
+  return true;
 }
 
 bool SystemMessageQueue::bindQueueViaQueueId(const int queue_id) {
