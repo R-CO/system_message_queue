@@ -28,7 +28,7 @@ class SystemMessageQueue {
   };
 
   SystemMessageQueue() = default;
-  SystemMessageQueue(const key_t key, const int msgflg);
+  // SystemMessageQueue(const key_t key, const int msgflg); // TODO:
 
   // No default copy constructor
   SystemMessageQueue(const SystemMessageQueue& SystemMessageQueeu) = delete;
@@ -45,8 +45,19 @@ class SystemMessageQueue {
   bool bindQueueViaQueueId(const int queue_id);
   bool removeQueue();
 
-  bool sendToQueue();
-  bool recieveFromQueue();
+  /*
+   * structure should be somthing like
+   * struct {
+   *   long mtype; // It must have, and named it "mtype".
+   *   char mtext[1] // message data
+   * }
+   *
+   * Please refer to `int msgsnd(int msqid, const void *msgp, size_t msgsz, int
+   * msgflg)` in <sys/msg.h>
+   */
+  bool sendToQueue(const void* msgp, const size_t msgsz, const int msgflg);
+  ssize_t recieveFromQueue(void* msgp, const size_t msgsz, const long msgtyp,
+                           const int msgflg);
 
   int getQueueId() const;
   int getErrorNo() const;
