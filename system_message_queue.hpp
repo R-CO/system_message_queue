@@ -1,5 +1,5 @@
-#ifndef RCO_UTILITY_SYSTEM_MESSAGE_QUEUE
-#define RCO_UTILITY_SYSTEM_MESSAGE_QUEUE
+#ifndef RCO_UTILITY_SYSTEM_MESSAGE_QUEUE_HPP
+#define RCO_UTILITY_SYSTEM_MESSAGE_QUEUE_HPP
 /**
 *** Author: R-CO
 *** E-mail: daniel1820kobe@gmail.com
@@ -56,7 +56,7 @@ class SystemMessageQueue {
    * msgflg)` in <sys/msg.h>
    */
   bool sendToQueue(const void* msgp, const size_t msgsz, const int msgflg);
-  ssize_t recieveFromQueue(void* msgp, const size_t msgsz, const long msgtyp,
+  ssize_t receiveFromQueue(void* msgp, const size_t msgsz, const long msgtyp,
                            const int msgflg);
 
   int getQueueId() const;
@@ -76,4 +76,4 @@ class SystemMessageQueue {
 
 }  // end of namespace rco
 
-#endif  // end of defin RCO_UTILITY_SYSTEM_MESSAGE_QUEUE
+#endif  // end of defin RCO_UTILITY_SYSTEM_MESSAGE_QUEUE_HPP

@@ -85,7 +85,7 @@ bool SystemMessageQueue::sendToQueue(const void *msgp, const size_t msgsz,
   return true;
 }
 
-ssize_t SystemMessageQueue::recieveFromQueue(void *msgp, const size_t msgsz,
+ssize_t SystemMessageQueue::receiveFromQueue(void *msgp, const size_t msgsz,
                                              const long msgtyp,
                                              const int msgflg) {
   const auto return_value =

@@ -139,7 +139,7 @@ TEST_F(SystemMessageQueueTest, sendToQueue) {
   EXPECT_TRUE(smq.removeQueue());
 }
 
-TEST_F(SystemMessageQueueTest, RecieveFromQueue) {
+TEST_F(SystemMessageQueueTest, ReceiveFromQueue) {
   rco::SystemMessageQueue smq;
   EXPECT_TRUE(smq.createQueue(gKeyIndex++));
 
@@ -168,7 +168,7 @@ TEST_F(SystemMessageQueueTest, RecieveFromQueue) {
   if (is_send_success) {
     MyData receive_data;
     enum MessageType { kReadFirst = 0 };
-    EXPECT_EQ(smq.recieveFromQueue(&receive_data, sizeof(receive_data.mbuffer),
+    EXPECT_EQ(smq.receiveFromQueue(&receive_data, sizeof(receive_data.mbuffer),
                                    MessageType::kReadFirst, kBlockMode),
               msg_size);
   }

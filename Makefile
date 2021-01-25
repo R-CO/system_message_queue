@@ -61,7 +61,7 @@ CC?=cc
 CXX?=c++
 AR?=ar
 
-CXXSRC = client.cpp system_message_queue.cpp
+CXXSRC = client.cpp server.cpp system_message_queue.cpp
 
 # ENTRY_LIST
 # VPATH=
