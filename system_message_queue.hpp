@@ -19,10 +19,12 @@ class SystemMessageQueue {
     create_or_open_existed,
     create_new_only
   };
+
+  // these values is "NOT" hex
   enum class Permission : int {
-    owner_only = 0x0600,
-    owner_and_group = 0x0660,
-    all = 0x0666
+    owner_only = 0600,
+    owner_and_group = 0660,
+    all = 0666
   };
 
   SystemMessageQueue() = default;
@@ -47,8 +49,11 @@ class SystemMessageQueue {
   bool recieveFromQueue();
 
   int getQueueId() const;
+  int getErrorNo() const;
 
  protected:
+  void reset();
+
  private:
   key_t key_ = 0;
   int msgflg_ = 0;

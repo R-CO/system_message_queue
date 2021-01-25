@@ -32,18 +32,10 @@ bool SystemMessageQueue::createQueueWithPermission(
 
 bool SystemMessageQueue::bindQueueViaKey(const key_t key) {
   static const int kGetMessageflg = 0;
-  static const int kCreateOnlyMessageflg =
-      static_cast<int>(Permission::all) | IPC_CREAT | IPC_EXCL;
-
-  // check exist
-  auto msqid = msgget(key, kCreateOnlyMessageflg);
-  if (msqid != -1) {
-    msgctl(msqid, IPC_RMID, nullptr);
-    return false;
-  }
 
   this->queue_id_ = msgget(key, kGetMessageflg);
   if (this->queue_id_ == -1) {
+    this->error_no_ = errno;
     return false;
   }
 
@@ -52,7 +44,19 @@ bool SystemMessageQueue::bindQueueViaKey(const key_t key) {
 
 bool SystemMessageQueue::bindQueueViaQueueId(const int queue_id) {
   // TODO:
-  return false;
+
+  // check existed and accessible
+  msqid_ds ds;
+  if (msgctl(queue_id, IPC_STAT, &ds) == -1) {
+    this->queue_id_ = -1;
+    this->error_no_ = errno;
+    return false;
+  }
+
+  this->queue_id_ = queue_id;
+  this->error_no_ = 0;
+
+  return true;
 }
 
 bool SystemMessageQueue::removeQueue() {
@@ -73,5 +77,7 @@ bool SystemMessageQueue::recieveFromQueue() {
 }
 
 int SystemMessageQueue::getQueueId() const { return this->queue_id_; }
+
+int SystemMessageQueue::getErrorNo() const { return this->error_no_; }
 
 }  // end of namespace rco
