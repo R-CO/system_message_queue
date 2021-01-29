@@ -74,7 +74,7 @@ ClientMainFrame::~ClientMainFrame() {
 }
 
 void ClientMainFrame::m_textCtrlKeyInOnTextEnter(wxCommandEvent &event) {
-  wxString buffer = m_textCtrlKeyIn->GetValue();
+  wxString buffer = std::move(event.GetString());
   const auto msgsz = buffer.utf8_str().length() + 1;
 
   static MessageBuffer message_buffer = {1, ""};
