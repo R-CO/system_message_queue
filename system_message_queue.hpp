@@ -19,7 +19,7 @@ namespace sysmsgq {
  * To inherit this structure for calling template function send/receive
  * ex:
  *   struct MyData : public rco::sysmsgq::MessageBufferBase {
- *     struct TYPE_OF_CONSEQUENT_MEMORY_BLOCK {
+ *     struct TYPE_OF_CONTIGUOUS_MEMORY_BLOCK {
  *       // ...
  *     };
  *   };
