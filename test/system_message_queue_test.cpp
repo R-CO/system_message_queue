@@ -104,10 +104,10 @@ TEST_F(SystemMessageQueueTest, sendToQueue) {
   rco::SystemMessageQueue smq;
   EXPECT_TRUE(smq.createQueue(gKeyIndex++));
 
-  static const size_t kLength_1K = 1024;
-  static const size_t kBufferSize = kLength_1K * 4;  // 4kb
+  static constexpr size_t kLength_1K = 1024;
+  static constexpr size_t kBufferSize = kLength_1K * 4;  // 4kb
   struct MyData {
-    MyData() : mtype(1) {}
+    MyData() : mtype(1), mbuffer("") {}
 
     long mtype;
     char mbuffer[kBufferSize];
@@ -145,7 +145,7 @@ TEST_F(SystemMessageQueueTest, ReceiveFromQueue) {
   static const size_t kLength_1K = 1024;
   static const size_t kBufferSize = kLength_1K * 4;  // 4kb
   struct MyData {
-    MyData() : mtype(1) {}
+    MyData() : mtype(1), mbuffer("") {}
 
     long mtype;
     char mbuffer[kBufferSize];
@@ -185,7 +185,7 @@ TEST(SystemMessageQueueTest_template_func, sendToQueue) {
 
   static constexpr size_t kBufferSize = 256;
   struct MyData : public rco::sysmsgq::MessageBufferBase {
-    MyData(const long mtype) : MessageBufferBase(mtype), mbuffer("") {}
+    explicit MyData(const long mtype) : MessageBufferBase(mtype), mbuffer("") {}
 
     char mbuffer[kBufferSize];
   };

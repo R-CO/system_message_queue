@@ -34,7 +34,7 @@ struct MessageBufferBase {
   long mtype;
 
   MessageBufferBase() : mtype(0) {}
-  MessageBufferBase(const long message_type) : mtype(message_type) {}
+  explicit MessageBufferBase(const long message_type) : mtype(message_type) {}
 };
 
 }  // end of namespace sysmsgq

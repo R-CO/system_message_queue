@@ -16,7 +16,7 @@ namespace rco {
 class ClientMainFrame : public ClientMainFrameBase {
  protected:
   // Handlers for ClientMainFrameBase events.
-  void m_textCtrlKeyInOnTextEnter(wxCommandEvent& event);
+  void m_textCtrlKeyInOnTextEnter(wxCommandEvent& event) override;
 
   void receiveThreadEventHandler(wxThreadEvent& event);
 
