@@ -2,6 +2,15 @@
 
 #include <errno.h>
 
+// #define DEBUG_RCO
+
+#ifdef DEBUG_RCO
+
+#include <chrono>
+#include <iostream>
+
+#endif  // end of ifdef DEBUG_RCO
+
 namespace rco {
 
 // SystemMessageQueue::SystemMessageQueue(const key_t key, const int msgflg)
@@ -76,11 +85,31 @@ bool SystemMessageQueue::sendToQueue(const void *msgp, const size_t msgsz,
                                      const int msgflg) {
   enum ReturnCode { ok = 0, fail = -1 };
 
+#ifdef DEBUG_RCO
+  auto t1 = std::chrono::high_resolution_clock::now();
+#endif  // end of ifdef DEBUG_RCO
+
   if (msgsnd(this->getQueueId(), msgp, msgsz, msgflg) ==
       static_cast<int>(ReturnCode::fail)) {
+#ifdef DEBUG_RCO
+    auto t2 = std::chrono::high_resolution_clock::now();
+    auto time_span =
+        std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1);
+    std::cout << "Time span of msgsnd() = [" << time_span.count()
+              << "] microseconds." << std::endl;
+#endif  // end of ifdef DEBUG_RCO
+
     this->error_no_ = errno;
     return false;
   }
+
+#ifdef DEBUG_RCO
+  auto t2 = std::chrono::high_resolution_clock::now();
+  auto time_span =
+      std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1);
+  std::cout << "Time span of msgsnd() = [" << time_span.count()
+            << "] microseconds." << std::endl;
+#endif  // end of ifdef DEBUG_RCO
 
   return true;
 }
@@ -88,11 +117,23 @@ bool SystemMessageQueue::sendToQueue(const void *msgp, const size_t msgsz,
 ssize_t SystemMessageQueue::receiveFromQueue(void *msgp, const size_t msgsz,
                                              const long msgtyp,
                                              const int msgflg) {
+#ifdef DEBUG_RCO
+  auto t1 = std::chrono::high_resolution_clock::now();
+#endif  // end of ifdef DEBUG_RCO
+
   const auto return_value =
       msgrcv(this->getQueueId(), msgp, msgsz, msgtyp, msgflg);
   if (return_value == static_cast<ssize_t>(-1)) {
     this->error_no_ = errno;
   }
+
+#ifdef DEBUG_RCO
+  auto t2 = std::chrono::high_resolution_clock::now();
+  auto time_span =
+      std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1);
+  std::cout << "Time span of msgrcv() = [" << time_span.count()
+            << "] microseconds." << std::endl;
+#endif  // end of ifdef DEBUG_RCO
 
   return return_value;
 }
